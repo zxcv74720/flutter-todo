@@ -60,7 +60,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             children: [
               const Text(
@@ -75,6 +75,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               Expanded(
                 child: TimePickerSpinner(
                   is24HourMode: false,
+                  alignment: Alignment.center,
+                  itemHeight: 30,
+                  highlightedTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                  normalTextStyle: const TextStyle(fontSize: 15, color: Colors.black26),
                   onTimeChange: (time) {
                     setState(() {
                       taskDueTime = time;
@@ -84,7 +88,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 50),
           TextButton(
             onPressed: () {
               if (taskTitle.isNotEmpty) {

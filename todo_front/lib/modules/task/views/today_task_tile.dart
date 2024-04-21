@@ -4,11 +4,11 @@ import 'package:todo_front/modules/task/controller/task_controller.dart';
 
 import '../../../data/models/task.dart';
 
-class TaskTile extends StatelessWidget {
+class TodayTaskTile extends StatelessWidget {
   final Task task;
   final TaskController taskController;
 
-  const TaskTile({Key? key, required this.task, required this.taskController})
+  const TodayTaskTile({Key? key, required this.task, required this.taskController})
       : super(key: key);
 
   @override
