@@ -18,31 +18,71 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
       child: ListView(
         children: [
           const Text(
-            'Add Task',
-            textAlign: TextAlign.center,
+            'Add a task',
+            textAlign: TextAlign.start,
             style: TextStyle(
-              fontSize: 30,
-              color: Colors.green,
+              fontSize: 34,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
             ),
           ),
-          TextField(
-            autofocus: true,
-            onChanged: (val) {
-              taskTitle = val;
-            },
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Name',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  autofocus: true,
+                  onChanged: (val) {
+                    taskTitle = val;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your task',
+                    hintStyle: TextStyle(color: Colors.black26),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black26),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
-          TimePickerSpinner(
-            is24HourMode: false,
-            onTimeChange: (time) {
-              setState(() {
-                taskDueTime = time;
-              });
-            },
+          Row(
+            children: [
+              const Text(
+                'Hour',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TimePickerSpinner(
+                  is24HourMode: false,
+                  onTimeChange: (time) {
+                    setState(() {
+                      taskDueTime = time;
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
           TextButton(
@@ -52,9 +92,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 Get.back();
               }
             },
-            style: TextButton.styleFrom(backgroundColor: Colors.green),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.black,
+              fixedSize: const Size.fromHeight(44),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10), // 모서리를 10으로 설정
+              ),
+            ),
             child: const Text(
-              'Add',
+              'Done',
               style: TextStyle(color: Colors.white),
             ),
           ),
