@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todo_front/data/provider/task_provider.dart';
-import 'package:todo_front/modules/task/controller/task_controller.dart';
-import 'package:todo_front/modules/task/views/task_tile.dart';
+import 'package:todo_front/modules/task/views/today_task_tile.dart';
+import 'package:todo_front/modules/task/views/yesterday_task_tile.dart';
 
 import '../../../data/models/task.dart';
+import '../../../data/provider/task_provider.dart';
+import '../controller/task_controller.dart';
 import 'add_task_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,23 +16,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Task>? tasks;
-
-  getTasks() async {
-    tasks = await TaskProvider.getTasks();
-    Get.find<TaskController>().tasks.assignAll(tasks!);
-  }
+  late TaskController _taskController;
 
   @override
   void initState() {
     super.initState();
-    getTasks();
+    _taskController = Get.put(TaskController());
+    _getTasks();
+  }
+
+  Future<void> _getTasks() async {
+    final tasks = await TaskProvider.getTasks();
+    _taskController.tasks.assignAll(tasks!);
+  }
+
+  Widget _buildTaskList(List<Task> tasks, Widget Function(Task) itemBuilder) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: tasks.length,
+      itemBuilder: (context, index) => itemBuilder(tasks[index]),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TaskController());
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -50,37 +59,40 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: Text(
-              'Today',
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                'Today',
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: GetBuilder<TaskController>(
-              builder: (controller) {
-                return ListView.builder(
-                  itemCount: controller.tasks.length,
-                  itemBuilder: (context, index) {
-                    Task task = controller.tasks[index];
-                    return TaskTile(
-                      task: task,
-                      taskController: controller,
-                    );
-                  },
-                );
-              },
+            GetBuilder<TaskController>(
+              builder: (controller) => _buildTaskList(controller.tasks, (task) => TodayTaskTile(task: task, taskController: controller)),
             ),
-          ),
-        ],
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Text(
+                'Yesterday',
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            GetBuilder<TaskController>(
+              builder: (controller) => _buildTaskList(controller.tasks, (task) => YesterdayTaskTile(task: task, taskController: controller)),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
@@ -89,16 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                ),
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.0),
+                topRight: Radius.circular(15.0),
               ),
-              builder: (context) {
-                return const AddTaskScreen();
-              });
+            ),
+            builder: (context) => const AddTaskScreen(),
+          );
         },
       ),
     );
