@@ -17,7 +17,7 @@ class TaskProvider extends GetConnect implements GetxService {
 
     print(response.body);
 
-    List responseList = jsonDecode(response.body);
+    List responseList = jsonDecode(utf8.decode(response.bodyBytes));
     List<Task> tasks = [];
     for (Map taskMap in responseList) {
       Task task = Task.fromMap(taskMap);
