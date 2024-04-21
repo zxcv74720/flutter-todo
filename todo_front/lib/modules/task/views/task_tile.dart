@@ -13,35 +13,37 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Checkbox(
-          activeColor: Colors.green,
-          value: task.done,
-          onChanged: (checkbox) {
-            taskController.updateTask(task);
-          },
+    return ListTile(
+      leading: Checkbox(
+        activeColor: Colors.black,
+        side: const BorderSide(
+          color: Colors.black26,
         ),
-        title: Text(
-          task.title,
-          style: TextStyle(
-            decoration:
-            task.done ? TextDecoration.lineThrough : TextDecoration.none,
-          ),
+        value: task.done,
+        onChanged: (checkbox) {
+          taskController.updateTask(task);
+        },
+      ),
+      title: Text(
+        task.title,
+        style: TextStyle(
+          color: task.done ? Colors.black26 : Colors.black,
+          decoration:
+              task.done ? TextDecoration.lineThrough : TextDecoration.none,
         ),
-        subtitle: Text(
-          DateFormat('HH:mm').format(task.dueTime),
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
+      ),
+      subtitle: Text(
+        DateFormat('hh:mm a').format(task.dueTime),
+        style: TextStyle(
+          color: task.done ? Colors.black26 : Colors.grey,
+          fontSize: 12,
         ),
-        trailing: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            taskController.deleteTask(task);
-          },
-        ),
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          taskController.deleteTask(task);
+        },
       ),
     );
   }

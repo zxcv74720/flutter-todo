@@ -34,37 +34,68 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text(
-              'Todo Tasks (${Get.find<TaskController>().tasks.length})',
-            )),
-        centerTitle: true,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: IconButton(
+              onPressed: () => print("logout action"),
+              icon: const Icon(
+                Icons.account_circle,
+                size: 44,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ],
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: GetBuilder<TaskController>(
-          builder: (controller) {
-            return ListView.builder(
-              itemCount: controller.tasks.length,
-              itemBuilder: (context, index) {
-                Task task = controller.tasks[index];
-                return TaskTile(
-                  task: task,
-                  taskController: controller,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Text(
+              'Today',
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.w800,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Expanded(
+            child: GetBuilder<TaskController>(
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount: controller.tasks.length,
+                  itemBuilder: (context, index) {
+                    Task task = controller.tasks[index];
+                    return TaskTile(
+                      task: task,
+                      taskController: controller,
+                    );
+                  },
                 );
               },
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.black,
         child: const Icon(
           Icons.add,
         ),
         onPressed: () {
           showModalBottomSheet(
               context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15.0),
+                  topRight: Radius.circular(15.0),
+                ),
+              ),
               builder: (context) {
                 return const AddTaskScreen();
               });
