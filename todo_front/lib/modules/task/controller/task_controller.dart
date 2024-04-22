@@ -4,11 +4,19 @@ import 'package:todo_front/data/provider/task_provider.dart';
 import '../../../data/models/task.dart';
 
 class TaskController extends GetxController {
-  RxList<Task> tasks = <Task>[].obs;
+  RxList<Task> todayTasks = <Task>[].obs;
+  RxList<Task> yesterdayTasks = <Task>[].obs;
 
   void addTask(String taskTitle, DateTime taskDueTime) async {
     Task task = await TaskProvider.addTask(taskTitle, taskDueTime);
-    tasks.add(task);
+    todayTasks.add(task);
+    update();
+  }
+
+  void reAddYesterdayTask(Task task) async {
+    await TaskProvider.reAddYesterdayTask(task.id);
+    yesterdayTasks.remove(task);
+    todayTasks.add(task);
     update();
   }
 
@@ -20,7 +28,17 @@ class TaskController extends GetxController {
 
   void deleteTask(Task task) async {
     await TaskProvider.deleteTask(task.id);
-    tasks.remove(task);
+    todayTasks.remove(task);
     update();
+  }
+
+  List<Task> sortTasks(List<Task> tasks) {
+    List<Task> doneTasks = tasks.where((task) => !task.done).toList();
+    List<Task> undoneTasks = tasks.where((task) => task.done).toList();
+
+    doneTasks.sort((a, b) => a.title.compareTo(b.title));
+    undoneTasks.sort((a, b) => a.title.compareTo(b.title));
+
+    return [...doneTasks, ...undoneTasks];
   }
 }

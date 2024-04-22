@@ -26,8 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getTasks() async {
-    final tasks = await TaskProvider.getTasks();
-    _taskController.tasks.assignAll(tasks!);
+    final todayTasks = await TaskProvider.getTodayTasks();
+    _taskController.todayTasks.assignAll(todayTasks!);
+
+    final yesterdayTasks = await TaskProvider.getYesterdayTasks();
+    _taskController.yesterdayTasks.assignAll(yesterdayTasks!);
   }
 
   Widget _buildTaskList(List<Task> tasks, Widget Function(Task) itemBuilder) {
@@ -75,7 +78,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             GetBuilder<TaskController>(
-              builder: (controller) => _buildTaskList(controller.tasks, (task) => TodayTaskTile(task: task, taskController: controller)),
+              builder: (controller) {
+                List<Task> sortedTasks = controller.sortTasks(controller.todayTasks);
+
+                return _buildTaskList(
+                  sortedTasks,
+                      (task) => TodayTaskTile(task: task, taskController: controller),
+                );
+              },
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -89,7 +99,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             GetBuilder<TaskController>(
-              builder: (controller) => _buildTaskList(controller.tasks, (task) => YesterdayTaskTile(task: task, taskController: controller)),
+              builder: (controller) {
+                List<Task> sortedTasks = controller.sortTasks(controller.yesterdayTasks);
+
+                return _buildTaskList(
+                  sortedTasks,
+                      (task) => YesterdayTaskTile(task: task, taskController: controller),
+                );
+              },
             ),
           ],
         ),

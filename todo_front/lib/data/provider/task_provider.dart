@@ -26,6 +26,42 @@ class TaskProvider extends GetConnect implements GetxService {
     return tasks;
   }
 
+  static Future<List<Task>> getTodayTasks() async {
+    var url = Uri.parse(baseURL + '/today');
+    http.Response response = await http.get(
+      url,
+      headers: headers,
+    );
+
+    print(response.body);
+
+    List responseList = jsonDecode(utf8.decode(response.bodyBytes));
+    List<Task> tasks = [];
+    for (Map taskMap in responseList) {
+      Task task = Task.fromMap(taskMap);
+      tasks.add(task);
+    }
+    return tasks;
+  }
+
+  static Future<List<Task>> getYesterdayTasks() async {
+    var url = Uri.parse(baseURL + '/yesterday');
+    http.Response response = await http.get(
+      url,
+      headers: headers,
+    );
+
+    print(response.body);
+
+    List responseList = jsonDecode(utf8.decode(response.bodyBytes));
+    List<Task> tasks = [];
+    for (Map taskMap in responseList) {
+      Task task = Task.fromMap(taskMap);
+      tasks.add(task);
+    }
+    return tasks;
+  }
+
   static Future<Task> addTask(String title, DateTime dueTime) async {
     Map<String, dynamic> data = {
       "title": title,
@@ -48,6 +84,18 @@ class TaskProvider extends GetConnect implements GetxService {
     Task task = Task.fromMap(responseMap);
 
     return task;
+  }
+
+  static Future<http.Response> reAddYesterdayTask(int id) async {
+    var url = Uri.parse(baseURL + '/reAdd/$id');
+    http.Response response = await http.put(
+      url,
+      headers: headers,
+    );
+
+    print(response.body);
+
+    return response;
   }
 
   static Future<http.Response> updateTask(int id) async {

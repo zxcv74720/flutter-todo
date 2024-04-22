@@ -16,17 +16,11 @@ class YesterdayTaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: task.done
-          ? IconButton(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.transparent,
-              ),
-              onPressed: () {},
-            )
+          ? const Icon(Icons.undo, color: Colors.transparent)
           : IconButton(
               icon: const Icon(Icons.undo),
               onPressed: () {
-                taskController.deleteTask(task);
+                taskController.reAddYesterdayTask(task);
               },
             ),
       title: Text(
