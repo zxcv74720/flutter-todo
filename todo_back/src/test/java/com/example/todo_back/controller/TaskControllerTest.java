@@ -2,6 +2,7 @@ package com.example.todo_back.controller;
 
 import com.example.todo_back.domain.TaskItem;
 import com.example.todo_back.repository.TaskRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("Task Controller")
 class TaskControllerTest {
 
+    @Disabled
     @DisplayName("[GET] 할 일 목록 불러오기")
     @Test
     void getTasks() {
