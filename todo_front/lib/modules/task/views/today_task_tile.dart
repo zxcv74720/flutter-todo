@@ -40,7 +40,7 @@ class TodayTaskTile extends StatelessWidget {
         ),
       ),
       trailing: IconButton(
-        icon: const Icon(Icons.clear),
+        icon: const Icon(Icons.delete),
         onPressed: () {
           taskController.deleteTask(task);
         },

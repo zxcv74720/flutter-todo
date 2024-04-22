@@ -100,7 +100,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               backgroundColor: Colors.black,
               fixedSize: const Size.fromHeight(44),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10), // 모서리를 10으로 설정
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
             child: const Text(
