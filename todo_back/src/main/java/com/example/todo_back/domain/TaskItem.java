@@ -32,7 +32,7 @@ public class TaskItem {
     private LocalDateTime dueTime;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
 
