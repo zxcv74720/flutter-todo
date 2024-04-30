@@ -7,8 +7,8 @@ class TaskController extends GetxController {
   RxList<Task> todayTasks = <Task>[].obs;
   RxList<Task> yesterdayTasks = <Task>[].obs;
 
-  void addTask(String taskTitle, DateTime taskDueTime) async {
-    Task task = await TaskProvider.addTask(taskTitle, taskDueTime);
+  void addTask(int id, String taskTitle, DateTime taskDueTime) async {
+    Task task = await TaskProvider.addTask(id, taskTitle, taskDueTime);
     todayTasks.add(task);
     update();
   }

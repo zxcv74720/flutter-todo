@@ -2,9 +2,11 @@ package com.example.todo_back.controller;
 
 import com.example.todo_back.domain.TaskItem;
 import com.example.todo_back.repository.TaskRepository;
+import com.example.todo_back.service.TaskService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ import java.util.List;
 public class TaskController {
     private final TaskRepository taskRepository;
 
+    @Autowired
+    private TaskService taskService;
+
     public TaskController(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
@@ -30,10 +35,22 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @GetMapping("/today")
-    public ResponseEntity<List<TaskItem>> getTodayTasks() {
-        LocalDate today = LocalDate.now();
-        List<TaskItem> tasks = taskRepository.findByCreatedAt(today);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<TaskItem>> getTasksByUserInfoId(@PathVariable Long userId) {
+        List<TaskItem> tasks = taskRepository.findByUserInfoId(userId);
+        return ResponseEntity.ok(tasks);
+    }
+
+
+    @GetMapping("/today/{userId}")
+    public ResponseEntity<List<TaskItem>> getTodayTasksByUserInfoId(@PathVariable Long userId) {
+        List<TaskItem> tasks = taskService.getTodayTasksByUserInfoId(userId);
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/yesterday/{userId}")
+    public ResponseEntity<List<TaskItem>> getYesterdayTasksByUserInfoId(@PathVariable Long userId) {
+        List<TaskItem> tasks = taskService.getYesterdayTasksByUserInfoId(userId);
         return ResponseEntity.ok(tasks);
     }
 
