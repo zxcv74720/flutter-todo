@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:todo_front/modules/task/views/today_task_tile.dart';
 import 'package:todo_front/modules/task/views/yesterday_task_tile.dart';
 
@@ -26,11 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getTasks() async {
-    final todayTasks = await TaskProvider.getTodayTasks();
-    _taskController.todayTasks.assignAll(todayTasks!);
+    User user = await UserApi.instance.me();
 
-    final yesterdayTasks = await TaskProvider.getYesterdayTasks();
-    _taskController.yesterdayTasks.assignAll(yesterdayTasks!);
+    final todayTasks = await TaskProvider.getTodayTasksByUserInfoId(user.id);
+    _taskController.todayTasks.assignAll(todayTasks);
+
+    final yesterdayTasks = await TaskProvider.getYesterdayTasksByUserInfoId(user.id);
+    _taskController.yesterdayTasks.assignAll(yesterdayTasks);
   }
 
   Widget _buildTaskList(List<Task> tasks, Widget Function(Task) itemBuilder) {

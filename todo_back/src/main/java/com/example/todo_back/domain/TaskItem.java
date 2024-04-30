@@ -1,18 +1,14 @@
 package com.example.todo_back.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -35,6 +31,14 @@ public class TaskItem {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_info_id", referencedColumnName = "id")
+    private UserInfo userInfo;
 
-    public TaskItem() {}
+    @Column(name = "user_info_id", insertable = false, updatable = false)
+    private Long userInfoId;
+
+    public Long getUserInfoId() {
+        return userInfoId;
+    }
 }

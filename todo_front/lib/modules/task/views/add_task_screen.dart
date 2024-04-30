@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:todo_front/modules/login/controller/kakao_login_controller.dart';
 
 import '../controller/task_controller.dart';
 
@@ -90,9 +92,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
           const SizedBox(height: 50),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (taskTitle.isNotEmpty) {
-                Get.find<TaskController>().addTask(taskTitle, taskDueTime);
+                User user = await UserApi.instance.me();
+                Get.find<TaskController>().addTask(user.id, taskTitle, taskDueTime);
                 Get.back();
               }
             },
